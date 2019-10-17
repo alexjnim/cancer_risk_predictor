@@ -126,7 +126,19 @@ cat_feats
 def fill_mode(df, attribute_list):
     for i in attribute_list:
         print(i)
+        print(df[i].dtype)
         df[i].fillna(df[i].mode()[0], inplace=True)
+        df[i] = df[i].astype(float)
+        print(df[i].dtype)
+    return df
+
+
+def convert_num(df, attribute_list):
+    for i in attribute_list:
+        print(i)
+        print(df[i].dtype)
+        df[i] = df[i].astype(float)
+        print(df[i].dtype)
     return df
 
 
@@ -158,7 +170,7 @@ l2 = [ 'Smokes',
 
 df = fill_mode(df, l)
 
-df.shape
+X_test = convert_num(X_test, l)
 
 df = df.dropna(how='any',axis=0) 
 
@@ -246,5 +258,9 @@ y_test.to_csv(r'y_test.csv')
 
 X_train_processed.to_csv(r'X_train_processed.csv')
 X_test_processed.to_csv(r'X_test_processed.csv')
+
+y_test.value_counts()
+
+y_train.value_counts()
 
 
