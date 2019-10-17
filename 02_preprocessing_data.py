@@ -40,10 +40,6 @@ df = pd.read_csv("kag_risk_factors_cervical_cancer.csv")
 
 df = df.drop(['STDs: Time since first diagnosis', 'STDs: Time since last diagnosis'], axis=1)
 
-df.shape
-
-df.head()
-
 t = df[df != '?'] #this will change all ? into nan
 
 t.head()
@@ -52,22 +48,29 @@ t.head()
 nan_df = t[t.isna().any(axis=1)]
 nonan_df = t.dropna()
 
-nonan_df.head()
+nonan_df['Biopsy'].value_counts()
+
+positive = nonan_df[nonan_df['Biopsy'] == 1]
+negative = nonan_df[nonan_df['Biopsy'] == 0]
 
 # +
 from sklearn.model_selection import train_test_split
 
-# here we make a X_pretest set that has 2/10 of the rows that don't have nan values. that is 2/10 * 77271 = 15450, 
-# so 15% of the training dataset
+# here we will split the data such that there are more biopsy = 1 values in the test data
 
-X_test, remaining_nonan = train_test_split(nonan_df, train_size= 0.2, random_state = 42)
+positive_test, positive_train = train_test_split(positive, train_size= 0.35, random_state = 42)
+negative_test, negative_train = train_test_split(negative, train_size= 0.2, random_state = 42)
 # -
+
+X_test = pd.concat([positive_test, negative_test])
 
 X_test.isnull().any(axis=0).sum()
 
-df = pd.concat([nan_df, remaining_nonan])
+X_test['Biopsy'].value_counts()
 
-df.shape
+nonan_train = pd.concat([positive_train, negative_train])
+
+df = pd.concat([nan_df, nonan_train])
 
 
 def print_totshape(df1, df2):
