@@ -201,4 +201,8 @@ y_train.to_csv(r'y_train.csv')
 
 X_train_processed.to_csv(r'X_train_processed.csv')
 
+y_train.shape
+
+y_train.to_csv(r'y_train2.csv')
+
 
