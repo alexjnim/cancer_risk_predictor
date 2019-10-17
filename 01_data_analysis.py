@@ -75,6 +75,42 @@ df['Biopsy'].value_counts()
 df.groupby('Biopsy')['Hormonal Contraceptives'].value_counts()
 
 # +
+import seaborn as sns
+
+def corr_matrix(df, attribute_list, key_attribute):
+    new_df = pd.DataFrame()
+    for i in attribute_list:
+        new_df[i] = df[i]
+            
+    matrix = new_df.corr()
+    f, ax = plt.subplots(figsize=(9, 6))
+    sns.heatmap(matrix, vmax=.8, square=True, cmap="YlGnBu")
+    
+    print(matrix[key_attribute].sort_values(ascending=False))
+    
+    return 
+
+
+# -
+
+def _get_categorical_features(df):
+    feats = [col for col in list(df.columns) if df[col].dtype == 'object']
+    return feats
+
+
+
+def _get_numerical_features(df, cat_list):
+    feats = [col for col in list(df.columns) if col not in cat_list]
+    return feats
+
+
+cat_feats = _get_categorical_features(df)
+
+num_feats = _get_numerical_features(df, cat_feats)
+
+corr_matrix(df, num_feats, 'Biopsy')
+
+# +
 pd.options.display.max_rows = 4000
 
 df.columns
@@ -105,10 +141,14 @@ def plot_bar_graphs(df, attribute, y):
     return
 
 
-plot_bar_graphs(df, 'First sexual intercourse', 'Biopsy')
-
 plot_bar_graphs(df, 'STDs: Number of diagnosis', 'Biopsy')
 
 plot_bar_graphs(df, 'STDs', 'Biopsy')
+
+plot_bar_graphs(df, 'Smokes', 'Biopsy')
+
+plot_bar_graphs(df, 'Schiller', 'Biopsy')
+
+cat_feats
 
 
