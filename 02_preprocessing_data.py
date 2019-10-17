@@ -58,8 +58,8 @@ from sklearn.model_selection import train_test_split
 
 # here we will split the data such that there are more biopsy = 1 values in the test data
 
-positive_test, positive_train = train_test_split(positive, train_size= 0.35, random_state = 42)
-negative_test, negative_train = train_test_split(negative, train_size= 0.2, random_state = 42)
+positive_test, positive_train = train_test_split(positive, train_size= 0.35, random_state = 23)
+negative_test, negative_train = train_test_split(negative, train_size= 0.2, random_state = 23)
 # -
 
 X_test = pd.concat([positive_test, negative_test])
@@ -129,7 +129,19 @@ cat_feats
 def fill_mode(df, attribute_list):
     for i in attribute_list:
         print(i)
+        print(df[i].dtype)
         df[i].fillna(df[i].mode()[0], inplace=True)
+        df[i] = df[i].astype(float)
+        print(df[i].dtype)
+    return df
+
+
+def convert_num(df, attribute_list):
+    for i in attribute_list:
+        print(i)
+        print(df[i].dtype)
+        df[i] = df[i].astype(float)
+        print(df[i].dtype)
     return df
 
 
@@ -161,7 +173,7 @@ l2 = [ 'Smokes',
 
 df = fill_mode(df, l)
 
-df.shape
+X_test = convert_num(X_test, l)
 
 df = df.dropna(how='any',axis=0) 
 
@@ -249,5 +261,9 @@ y_test.to_csv(r'y_test.csv')
 
 X_train_processed.to_csv(r'X_train_processed.csv')
 X_test_processed.to_csv(r'X_test_processed.csv')
+
+y_test.value_counts()
+
+y_train.value_counts()
 
 
