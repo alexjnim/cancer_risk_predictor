@@ -74,7 +74,7 @@ print('Has cervical cancer:', round(y_train.value_counts()[1]/len(y_train) * 100
 
 y_train.value_counts()
 
-# # 99.8% accuracy?? surely not, it must have overfitted. let's check with cross val
+# # 100% accuracy?? surely not, it must have overfitted. let's check with cross val
 
 # +
 from sklearn.model_selection import cross_val_predict
@@ -119,7 +119,7 @@ y_test_pred = forest_clf.predict(X_test)
 confusion_matrices(y_test, y_test_pred)
 # -
 
-# # but trying this on test data doesn't work so well! 
+# # but trying this on test data doesn't work so well! clearly just predicting that everything is 0
 
 # # let's further confrim this with Cross Validation to check this against the validation set
 
@@ -194,9 +194,11 @@ confusion_matrices(y_train, y_train_pred)
 y_test_pred = cross_val_predict(best_model, X_test, y_test, cv=3)
 
 confusion_matrices(y_test, y_test_pred)
+# -
 
-# +
-# let's try with SMOTE
+y_train.value_counts()
+
+# # not quite as good 50/50 prediction, but still better. let's try with SMOTE
 
 # +
 from sklearn.model_selection import KFold
@@ -207,7 +209,7 @@ smt = SMOTE()
 def KFold_SMOTE_model_scores(X_df, y, model):
     
     scores = []
-    cv = KFold(n_splits=5, random_state=42, shuffle=False)
+    cv = KFold(n_splits=5, random_state= 1, shuffle=True)
     
     # need to reset the indices as the 
     X_df = X_df.reset_index(drop=True)
